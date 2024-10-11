@@ -1,38 +1,30 @@
-```mermaid
-graph TD
-    %% Define Data Centers
-    PrimaryDC[Riyadh Data Center] -->|Physical Link| BranchRiyadh[Branch LAN - Riyadh]
-    PrimaryDC -->|Physical Link| BranchJeddah[Branch LAN - Jeddah]
-    SecondaryDC[Jeddah Data Center] -->|Physical Link| BranchJeddah
-    PrimaryDC -->|Redundant Link| SecondaryDC
+graph TD;
+  %% Physical links %%
+  A[Customer's Device] -->|Physical Link: Internet Service Provider| B[Branch Router];
+  B -->|Physical Link: Ethernet| C[Branch LAN - Switch];
+  C -->|Physical Link: Fiber Optic| D[WAN Router];
+  D -->|Physical Link: Wide Area Network (WAN)| E[Headquarters Router];
+  E -->|Physical Link: Ethernet| F[Headquarters LAN - Switch];
+  F -->|Physical Link: Server Connection| G[Main Bank Server];
 
-    %% Define Branch LANs for Riyadh
-    subgraph BranchRiyadh
-        ATM1[ATM 1] -->|Data Link| RouterRiyadh[Router - Riyadh]
-        Workstation1[Workstation 1] -->|Data Link| RouterRiyadh
-        CustomerService1[Customer Service Workstation] -->|Data Link| RouterRiyadh
-        TransactionProcessing1[Transaction Processing Workstation] -->|Data Link| RouterRiyadh
-        ITSupport1[IT Support Workstation] -->|Data Link| RouterRiyadh
-        HR1[HR Workstation] -->|Data Link| RouterRiyadh
-        Marketing1[Marketing Workstation] -->|Data Link| RouterRiyadh
-        Operations1[Operations Workstation] -->|Data Link| RouterRiyadh
-        RouterRiyadh -->|Data Link| PrimaryDC
-    end
+  %% Data-links %%
+  C ---|Data-link Layer: Frame moves within LAN| H[Branch Switch];
+  F ---|Data-link Layer: Frame within HQ LAN| I[Data Center Switch];
 
-    %% Define Branch LANs for Jeddah
-    subgraph BranchJeddah
-        ATM2[ATM 2] -->|Data Link| RouterJeddah[Router - Jeddah]
-        Workstation2[Workstation 2] -->|Data Link| RouterJeddah
-        CustomerService2[Customer Service Workstation] -->|Data Link| RouterJeddah
-        TransactionProcessing2[Transaction Processing Workstation] -->|Data Link| RouterJeddah
-        ITSupport2[IT Support Workstation] -->|Data Link| RouterJeddah
-        HR2[HR Workstation] -->|Data Link| RouterJeddah
-        Marketing2[Marketing Workstation] -->|Data Link| RouterJeddah
-        Operations2[Operations Workstation] -->|Data Link| RouterJeddah
-        RouterJeddah -->|Data Link| PrimaryDC
-    end
+  %% Packet Routes %%
+  A -->|Packet Route: Packet sent from Customer to Branch Router| B;
+  B -->|Packet Route: Packet routed through WAN| D;
+  D -->|Packet Route: Packet routed through HQ Router| E;
+  E -->|Packet Route: Packet delivered to Main Server| G;
+  G -->|Packet Route: Response packet routed back to Customer| E;
+  E -->|Packet Route: Back to Branch Router| D;
+  D -->|Packet Route: Back to Customer's Device| A;
 
-    %% Define Internet and Customer Packets
-    Internet[Internet Gateway] -->|Customer Packet Route| PrimaryDC
-    Internet -->|Customer Packet Route| SecondaryDC
+  %% Descriptions %%
+  click A "https://example.com/customer-device" "Customer initiates request";
+  click G "https://example.com/server" "Server processes the transaction";
+
+  %% Styles %%
+  style A fill:#f9f,stroke:#333,stroke-width:4px;
+  style G fill:#bbf,stroke:#333,stroke-width:4px;
 
