@@ -23,3 +23,12 @@ graph TD
     %% Define Internet and Customer Packets
     Internet[Internet Gateway] -->|Customer Packet Route| PrimaryDC
     Internet -->|Customer Packet Route| SecondaryDC
+
+    %% Legend
+    classDef legend fill:#f9f,stroke:#333,stroke-width:2px;
+    classDef physical fill:#bbf,stroke:#333,stroke-width:2px;
+    classDef data fill:#fbb,stroke:#333,stroke-width:2px;
+
+    class Internet legend;
+    class PrimaryDC,SecondaryDC physical;
+    class BranchRiyadh,BranchJeddah,BranchDammam data;
